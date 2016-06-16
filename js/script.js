@@ -72,7 +72,9 @@
 
 	     else {
 	      if (this.style.background == openedColor.style.background) {
-		alert("you passed this ROUND, press okay to move to next ROUND");
+	      	this.style.display = "none";
+			   openedColor.style.display= "none";
+		/**alert("you passed this ROUND, press okay to move to next ROUND");**/
 		  
 			round +=1;
 			openedColor="";
@@ -86,7 +88,7 @@
 			else { 
 				this.style.opacity = 0;
 			   openedColor.style.opacity=0;
-			   alert("try again");
+			   alert("go to next round");
 			   colorsOpen = 0;
 		}
 	 		}
