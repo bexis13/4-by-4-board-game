@@ -57,7 +57,7 @@
 	window.onload =  function(){
 	       doGame();
 	    };
-	/***round 1***/
+	/*** game rounds***/
 
 	function doGame() {
 
@@ -68,7 +68,7 @@
 	     if (colorsOpen ==0){
 	     openedColor = this;
 	     colorsOpen +=1;
-	     console.log(openedColor.style.background);}
+	    }
 
 	     else {
 	      if (this.style.background == openedColor.style.background) {
