@@ -1,62 +1,115 @@
-var mem_arr = ['!','!','@','@','#','#','$','$','%','%','&','&','*','*','+','+'];
-var mem_vals = [];
-var tile_ids = [];
-var  opened_tiles = 0;
-Array.prototype.memory_tile_mixing = function(){
-    var i = this.length, j, temp;
-    while(--i > 0){
-        j = Math.floor(Math.random() * (i+1));
-        temp = this[j];
-        this[j] = this[i];
-        this[i] = temp;
-    }
-}
-function restart(){
-  opened_tiles = 0;
-  var display = '';
-    mem_arr.memory_tile_mixing();
-  for (var x = 0; x < mem_arr.length; x++){
-    display += '<div id="tile_'+x+'" onclick=" doGame(this,\''+mem_arr[x]+'\')"></div>';
-  }
-  document.getElementById('board').innerHTML = display;
-}
-function doGame(tile,val){
-  if (tile.innerHTML == "" && mem_vals.length < 2){
-    tile.style.background = '#FFF';
-    tile.innerHTML = val;
-    if(mem_vals.length == 0){
-      mem_vals.push(val);
-      tile_ids.push(tile.id);
-    } else if(mem_vals.length == 1){
-      mem_vals.push(val);
-      tile_ids.push(tile.id);
-      if(mem_vals[0] == mem_vals[1]){
-         opened_tiles += 2;
-        /***empty the two arrays****/
-        mem_vals = [];
-              tile_ids = [];
-        /****checking to see if the entire board is empty***/
-        if( opened_tiles == mem_arr.length){
-          alert("the game is restarting");
-          document.getElementById('board').innerHTML = "";
-          restart();
-        }
-      } else {
-        function turntheback(){
-            /*** turn the two tiles back***/
-            var tile_1 = document.getElementById(tile_ids[0]);
-            var tile_2 = document.getElementById(tile_ids[1]);
-            tile_1.style.background = 'url("cover.png") no-repeat';
-                  tile_1.innerHTML = "";
-            tile_2.style.background = 'url("cover.png") no-repeat';
-                  tile_2.innerHTML = "";
-            /***empty both array***/
-            mem_vals = [];
-                  tile_ids = [];
-        }
-        setTimeout(turntheback, 720);
-      }
-    }
-  }
-}
+   
+  /*** i generated 8 unique random colors and stored them in an array called colors***/
+ 
+   function randomColor(){
+       var R = Math.floor(Math.random() * 256);
+       var G = Math.floor(Math.random() * 256);
+       var B = Math.floor(Math.random() * 256);
+       
+       return "rgb("+ R +", "+ G +", "+ B +")";}
+   var colors=[];
+  var randomColour="";
+   for( var i=0; i<8; i++){ randomColour = randomColor();
+   colors.push(randomColour);
+   colors.push(randomColour);/** making a copy of each, so we have a total of 16  colours at the end***/
+   }
+   /*** made a new array called mixedcolors, and assigned each item from colors, to a new random position in mixedColors arrray,
+   so we can have the colours all mixed up***/
+ 
+     var index;
+    var mixedColors = [];
+     colors.forEach( function(item){ 
+     fixing();
+     function fixing(){index = Math.floor(Math.random()* 16);
+     if (!mixedColors[index]){mixedColors[index]= item;}
+     else {fixing();}
+ 
+     }
 
+   })
+ 
+   /**************/
+    
+   /** assigned each colour from mixedColor array to a tile on the page***/ 
+   var tile = document.querySelectorAll(".tile");
+ 
+   for (var i=0; i<tile.length; i++) {
+     tile[i].style.background = mixedColors[i];
+   };
+ 
+  /**********/
+ 
+   /***  turn on the opacity and make it visible when clicked  ***/
+ 
+   document.addEventListener("DOMContentLoaded", function() {
+       [].forEach.call(document.querySelectorAll(".tile"), function(tile) {
+     tile.addEventListener("click", function() {
+        this.style.opacity =1;
+     });
+  });
+   });
+   /*********/
+ 
+   /***game play***/
+   var tileClass="";
+   var openedColor="";
+   var secondOpenedColor="";
+   var colorsOpen= 0;
+
+   var round =1;
+   window.onload =  function(){
+         doGame();
+       };
+   /***round 1***/
+ 
+   function doGame() {
+ 
+    tileClass = document.querySelectorAll(".tile");
+ 
+      for (var i = 0; i<tileClass.length; i++) {
+         tileClass[i].addEventListener("click", function(){
+        if (colorsOpen ==0){
+        openedColor = this;
+      
+        colorsOpen +=1;
+        console.log(openedColor.style.background);}
+ 
+        else {
+         if (this.style.background == openedColor.style.background) {
+    
+       
+       round +=1;
+       openedColor="";
+       colorsOpen= 0;
+        if (round==9){ alert("GAME OVER! The game will reload now");
+        function reloadGame() {
+         location.reload();
+            }
+            setTimeout(reloadGame, 760);
+          }
+       
+       }
+       else { 
+            secondOpenedColor = this;
+            function close(){
+              secondOpenedColor.style.opacity = 0;
+          openedColor.style.opacity=0;
+          
+          colorsOpen = 0;
+            }
+             setTimeout(close, 740);
+            
+
+         
+     }
+       }
+        })
+       } 
+   }
+       
+ 
+  /********/
+ 
+ 
+ 
+   /**********/
